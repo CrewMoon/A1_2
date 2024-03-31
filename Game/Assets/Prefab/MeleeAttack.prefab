@@ -13,9 +13,10 @@ GameObject:
   - component: {fileID: 1529708396541274414}
   - component: {fileID: 5117260000094673941}
   - component: {fileID: 4480381265793750151}
+  - component: {fileID: 626809019715017382}
   m_Layer: 6
   m_Name: MeleeAttack
-  m_TagString: Untagged
+  m_TagString: MeleeAttack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -124,3 +125,19 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &626809019715017382
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3007180374744522023}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 183748dd497aa473a98ff0cd8cb67fc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 1
+  uniqueID: 9165979365485257852
+  updateError: 1
+  checkTime: 0.2

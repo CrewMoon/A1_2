@@ -4,10 +4,14 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - MeleeEnemy
-  - RangedEnemy
   - NondestructibleObstacle
   - WreckableObstacle
+  - MeleeEnemy
+  - BulletEnemy
+  - RangedEnemy
+  - Hero
+  - MeleeAttack
+  - BulletAttack
   layers:
   - Default
   - TransparentFX

@@ -1,17 +1,25 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Pathfinding;
 using Unity.VisualScripting;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class MeleeEnemy : MonoBehaviour
 {
-    private const int InitHeart = 2;
-    private const int Damage = 1;
+    private const int HEALTH = 2;
+    private const int DAMAGE = 1;
     private const int Range = 30;
     private const float CoolDownTime = 1f;
     private const float RefreshTime = 2f;
+    private int health = HEALTH;
     private bool _canFire = true;
+
+    private void Awake()
+    {
+        GetComponent<AIDestinationSetter>().target = GameObject.Find("Hero").transform;
+    }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -20,15 +28,16 @@ public class MeleeEnemy : MonoBehaviour
             GameObject touchedObject = collision.gameObject;
             string touchedTage = touchedObject.tag;
 
-            if (touchedTage == "Player")
+            if (touchedTage == "Hero")
             {
                 int heroHealth = touchedObject.GetComponent<Hero>().GetHealth();
-                if (heroHealth > Damage)
+                if (heroHealth > DAMAGE)
                 {
-                    touchedObject.GetComponent<Hero>().SetHealth(heroHealth - Damage);
+                    touchedObject.GetComponent<Hero>().SetHealth(heroHealth - DAMAGE);
                 }
                 else
                 {
+                    touchedObject.SetActive(false);
                     Debug.Log("fail");
                 }
             }
@@ -44,13 +53,43 @@ public class MeleeEnemy : MonoBehaviour
         _canFire = true;
     }
 
-    public void Kill()
+    public void RefreshAfterFreshTime()
     {
-        this.gameObject.SetActive(false);
+        Invoke("RefreshPosition", RefreshTime);
+        health = HEALTH;
+    }
+    
+    public void RefreshPosition()
+    {
+        GameObject parent = GameObject.Find("Map");
+        float offset = 20f;
+        
+        float radius = this.GetComponentInChildren<CircleCollider2D>().radius;
+        float rangeRadius = parent.GetComponent<RectTransform>().rect.width / 2 - radius - offset;
+        
+        Vector2 position = new Vector2()
+        {
+            x = Random.Range(-rangeRadius, rangeRadius),
+            y = Random.Range(-rangeRadius, rangeRadius),
+        };
+        
+        if (AstarPath.active.GetNearest(position).node.Walkable)
+        {
+            this.GetComponent<RectTransform>().anchoredPosition  = position;
+        }
+        else
+        {
+            RefreshPosition();
+        }
     }
 
-    public float GetRefreshTime()
+    public int getHealth()
     {
-        return RefreshTime;
+        return health;
+    }
+
+    public void setHealth(int health)
+    {
+        this.health = health;
     }
 }

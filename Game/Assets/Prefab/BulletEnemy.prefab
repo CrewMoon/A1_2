@@ -16,9 +16,10 @@ GameObject:
   - component: {fileID: 5743794279454783671}
   - component: {fileID: 1892958772131018165}
   - component: {fileID: 7491574832131865870}
-  m_Layer: 6
+  - component: {fileID: 5388636444970472295}
+  m_Layer: 0
   m_Name: BulletEnemy
-  m_TagString: RangedEnemy
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -178,7 +179,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   version: 5
-  radius: 0.5
+  radius: 8
   height: 2
   canMove: 1
   maxSpeed: 40
@@ -221,3 +222,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 1
   target: {fileID: 1087189137258218069, guid: 276d8a9bca1f69c47b64f092ba2b208f, type: 3}
+--- !u!114 &5388636444970472295
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 906307239366457810}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 183748dd497aa473a98ff0cd8cb67fc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 1
+  uniqueID: 8506529318106879147
+  updateError: 1
+  checkTime: 0.2

@@ -1,24 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using DefaultNamespace;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class SceneManager : MonoBehaviour
 {
-    /*
-    private 
-    */
-    
-    public GameObject Map;
-    public GameObject ObstacleParent;
-    public GameObject MeleeEnemyParent;
-    public GameObject RangedEnemyStationParent;
-    
-    public GameObject HeroPrefab;
-    public GameObject NondestructibleObstaclePrefab;
-    public GameObject WreckableObstaclePrefab;
-    public GameObject MeleeEnemyPrefab;
-    public GameObject RangedEnemyStationPrefab;
+  
+    public GameObject Hero;
+    public GameObject NondestructibleObstacles;
+    public GameObject WreckableObstacles;
+    public GameObject MeleeEnemies;
+    public GameObject RangedEnemies;
     
     // Start is called before the first frame update
     void Awake()
@@ -28,85 +22,55 @@ public class SceneManager : MonoBehaviour
 
     private void InitScene()
     {
-        InitFirstScene();
+        InitSecondScene();
     }
 
     private void InitFirstScene()
     {
-        RefreshBox(HeroPrefab, 1, Map);
-        RefreshBox(NondestructibleObstaclePrefab, 15, ObstacleParent);
-        RefreshBox(WreckableObstaclePrefab, 15, ObstacleParent);
-        RefreshCircle(MeleeEnemyPrefab, 10, MeleeEnemyParent);
+        RefreshBackground();
+        Hero.GetComponent<Hero>().RefreshPosition();
+        for (int i = 0; i < 10; i++)
+        {
+            Transform MeleeEnemy = MeleeEnemies.transform.GetChild(i);
+            MeleeEnemy.GameObject().SetActive(true);
+            MeleeEnemy.GetComponentInChildren<MeleeEnemy>().RefreshPosition();
+        }
         AstarPath.active.Scan();
     }
 
     private void InitSecondScene()
     {
-        RefreshBox(HeroPrefab, 1, Map);
-        RefreshBox(NondestructibleObstaclePrefab, 15, ObstacleParent);
-        RefreshBox(WreckableObstaclePrefab, 15, ObstacleParent);
-        RefreshCircle(MeleeEnemyPrefab, 15, MeleeEnemyParent);
-        RefreshBox(RangedEnemyStationPrefab, 5, RangedEnemyStationParent);
+        RefreshBackground();
+        Hero.GetComponent<Hero>().RefreshPosition();
+        for (int i = 0; i < 15; i++)
+        {
+            Transform MeleeEnemy = MeleeEnemies.transform.GetChild(i);
+            MeleeEnemy.GameObject().SetActive(true);
+            MeleeEnemy.GetComponentInChildren<MeleeEnemy>().RefreshPosition();
+        }
+
+        for (int i = 0; i < 5; i++)
+        {
+            Transform RangedEnemy = RangedEnemies.transform.GetChild(i);
+            RangedEnemy.GameObject().SetActive(true);
+            RangedEnemy.GetComponent<RangedEnemy>().RefreshPosition();
+        }
         AstarPath.active.Scan();
     }
 
-    private void RefreshBox(GameObject prefab, int num, GameObject parent)
+    private void RefreshBackground()
     {
-        for (int i = 0; i < num; i++)
+        for (int i = 0; i < 15; i++)
         {
-            Vector3 position = RefreshBoxPosition(prefab, parent);
-            GameObject Obstacle = Instantiate(prefab, position + this.transform.position, Quaternion.identity, parent.transform);
-        }
-    }
-
-    private void RefreshCircle(GameObject prefab, int num, GameObject parent)
-    {
-        for (int i = 0; i < num; i++)
-        {
-            Vector3 position = RefreshCirclePosition(prefab, parent);
-            GameObject Obstacle = Instantiate(prefab, position + this.transform.position, Quaternion.identity, parent.transform);
-        }
-        
-    }
-
-    public Vector3 RefreshBoxPosition(GameObject refreshObject, GameObject parent)
-    {
-        float width = refreshObject.GetComponent<RectTransform>().rect.width;
-        
-        float rangeRadius = parent.GetComponent<RectTransform>().rect.width / 2 - width / 2;
-        
-        Vector3 position = new Vector3()
-        {
-            x = Random.Range(-rangeRadius, rangeRadius),
-            y = Random.Range(-rangeRadius, rangeRadius),
-            z = 0
-        };
-
-        if (Physics.OverlapBox(position, Vector3.one * width).Length > 0)
-        {
-            position = RefreshBoxPosition(refreshObject, parent);
+            Transform NondestructibleObstacle =  NondestructibleObstacles.transform.GetChild(i);
+            NondestructibleObstacle.GetComponent<NondestructibleObstacle>().RefreshPosition();
         }
 
-        return position;
-    }
-
-    public Vector3 RefreshCirclePosition(GameObject refreshObject, GameObject parent)
-    {
-        float radius = refreshObject.GetComponent<CircleCollider2D>().radius;
-        float rangeRadius = parent.GetComponent<RectTransform>().rect.width / 2 - radius;
-        
-        Vector3 position = new Vector3()
+        for (int i = 0; i < 15; i++)
         {
-            x = Random.Range(-rangeRadius, rangeRadius),
-            y = Random.Range(-rangeRadius, rangeRadius),
-            z = 0
-        };
-
-        if (Physics.OverlapSphere(position, radius).Length > 0)
-        {
-            position = RefreshCirclePosition(refreshObject, parent);
+            Transform WreckableObstacle =  WreckableObstacles.transform.GetChild(i);
+            WreckableObstacle.GetComponent<WreckableObstacle>().RefreshPosition();
         }
-
-        return position;
     }
+    
 }
