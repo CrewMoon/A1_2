@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8061961177104938103}
   - component: {fileID: 9045507935953664293}
   - component: {fileID: 2911419907935458368}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: ShootingAlignment
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -90,7 +90,7 @@ GameObject:
   - component: {fileID: 1129255934830956731}
   - component: {fileID: 6469329062205863568}
   - component: {fileID: 7077440607270121428}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: RangedEnemy
   m_TagString: RangedEnemy
   m_Icon: {fileID: 0}

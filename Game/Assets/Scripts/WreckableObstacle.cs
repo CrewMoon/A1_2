@@ -12,31 +12,30 @@ namespace DefaultNamespace
         {
             health = HEALTH;
         }
-        
+
         public void RefreshPosition()
         {
             GameObject parent = GameObject.Find("Map");
             float offset = 20f;
-        
+            
             float width = this.GetComponent<RectTransform>().rect.width;
             float rangeRadius = parent.GetComponent<RectTransform>().rect.width / 2 - width / 2 - offset;
+            Vector2 position = new Vector2();
+            bool walkable = false;
+            
+            while (!walkable)
+            {
+                position.x = Random.Range(-rangeRadius, rangeRadius);
+                position.y = Random.Range(-rangeRadius, rangeRadius);
         
-            Vector2 position = new Vector2()
-            {
-                x = Random.Range(-rangeRadius, rangeRadius),
-                y = Random.Range(-rangeRadius, rangeRadius)
-            };
-        
-            bool hasObstacle = CheckForObstacles(position, width / 2f);
-            if (!hasObstacle)
-            {
-                this.GetComponent<RectTransform>().anchoredPosition  = position;
-            }
-            else
-            {
-                RefreshPosition();
+                if (AstarPath.active.GetNearest(position).node.Walkable)
+                {
+                    walkable = true;
+                    this.GetComponent<RectTransform>().anchoredPosition = position;
+                }
             }
         }
+
         
         private bool CheckForObstacles(Vector3 position, float radius)
         {

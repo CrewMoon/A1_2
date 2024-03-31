@@ -33,7 +33,6 @@ public class Hero : MonoBehaviour
     public GameObject TimeIndicator;
     public GameObject ScoreIndicator;
     public GameObject LifeIndicator;
-    public Image whycan;
 
 
 
@@ -48,6 +47,8 @@ public class Hero : MonoBehaviour
         SurviveTimeUpdate();
         RangedAttackCoolDown();
         MeleeAttackCoolDown();
+        TimeIndicator.GetComponent<TMP_Text>().text = "Time: " + Math.Round(AlreadySurviveTime, 2);
+        ScoreIndicator.GetComponent<TMP_Text>().text = "Score: " + Score;
     }
 
     private void Refresh()
@@ -67,24 +68,23 @@ public class Hero : MonoBehaviour
     {
         GameObject parent = GameObject.Find("Map");
         float offset = 20f;
-        
+            
         float width = this.GetComponent<RectTransform>().rect.width;
-        
         float rangeRadius = parent.GetComponent<RectTransform>().rect.width / 2 - width / 2 - offset;
+        Vector2 position = new Vector2();
+        bool walkable = false;
+    
         
-        Vector2 position = new Vector2()
+        while (!walkable)
         {
-            x = Random.Range(-rangeRadius, rangeRadius),
-            y = Random.Range(-rangeRadius, rangeRadius)
-        };
+            position.x = Random.Range(-rangeRadius, rangeRadius);
+            position.y = Random.Range(-rangeRadius, rangeRadius);
         
-        if (AstarPath.active.GetNearest(position).node.Walkable)
-        {
-            this.GetComponent<RectTransform>().anchoredPosition  = position;
-        }
-        else
-        {
-            RefreshPosition();
+            if (AstarPath.active.GetNearest(position).node.Walkable)
+            {
+                walkable = true;
+                this.GetComponent<RectTransform>().anchoredPosition = position;
+            }
         }
     }
 
@@ -170,54 +170,52 @@ public class Hero : MonoBehaviour
 
     private void RangedAttackCoolDown()
     {
+        GameObject TimeText = RangedSkill.transform.GetChild(0).GameObject();
+        GameObject CoolDownMask = RangedSkill.transform.GetChild(2).GameObject();
         if (!canFireRangedAttack)
         {
-            GameObject TimeText = RangedSkill.transform.GetChild(0).GameObject();
-            GameObject CoolDownMask = RangedSkill.transform.GetChild(2).GameObject();
             if (RangedAttackCoolDownTime > 0)
             {
                 TimeText.SetActive(true);
                 CoolDownMask.SetActive(true);
                 RangedAttackCoolDownTime -= Time.deltaTime;
-                TimeText.GetComponent<TMP_Text>().text = RangedAttackCoolDownTime.ToString();
+                double d = Math.Round(RangedAttackCoolDownTime, 2);
+                TimeText.GetComponent<TMP_Text>().text = d.ToString();
                 CoolDownMask.GetComponent<Image>().fillAmount = RangedAttackCoolDownTime /
                                                                 RangedAttackPrefab.GetComponent<BulletAttack>()
                                                                     .GetCoolDownTime();
-            }
-            else
-            {
-                TimeText.SetActive(false);
-                CoolDownMask.SetActive(false);
-                RangedAttackCoolDownTime = RangedAttackPrefab.GetComponent<BulletAttack>().GetCoolDownTime();
-                canFireRangedAttack = true;
+                return;
             }
         }
+        TimeText.SetActive(false);
+        CoolDownMask.SetActive(false);
+        RangedAttackCoolDownTime = RangedAttackPrefab.GetComponent<BulletAttack>().GetCoolDownTime();
+        canFireRangedAttack = true;
     }
     
     private void MeleeAttackCoolDown()
     {
+        GameObject TimeText = MeleeSkill.transform.GetChild(0).GameObject();
+        GameObject CoolDownMask = MeleeSkill.transform.GetChild(2).GameObject();
         if (!canFireMeleeAttack)
         {
-            GameObject TimeText = MeleeSkill.transform.GetChild(0).GameObject();
-            GameObject CoolDownMask = MeleeSkill.transform.GetChild(2).GameObject();
             if (MeleeAttackCoolDownTime > 0)
             {
                 TimeText.SetActive(true);
                 CoolDownMask.SetActive(true);
                 MeleeAttackCoolDownTime -= Time.deltaTime;
-                TimeText.GetComponent<TMP_Text>().text = MeleeAttackCoolDownTime.ToString();
+                double d = Math.Round(MeleeAttackCoolDownTime, 2);
+                TimeText.GetComponent<TMP_Text>().text = d.ToString();
                 CoolDownMask.GetComponent<Image>().fillAmount = MeleeAttackCoolDownTime /
                                                                 MeleeAttackPrefab.GetComponent<MeleeAttack>()
                                                                     .GetCoolDownTime();
-            }
-            else
-            {
-                TimeText.SetActive(false);
-                CoolDownMask.SetActive(false);
-                MeleeAttackCoolDownTime = MeleeAttackPrefab.GetComponent<MeleeAttack>().GetCoolDownTime();
-                canFireMeleeAttack = true;
+                return;
             }
         }
+        TimeText.SetActive(false);
+        CoolDownMask.SetActive(false);
+        MeleeAttackCoolDownTime = MeleeAttackPrefab.GetComponent<MeleeAttack>().GetCoolDownTime();
+        canFireMeleeAttack = true;
     }
     private void ResetRangedAttack()
     {
@@ -232,6 +230,10 @@ public class Hero : MonoBehaviour
     public void SetHealth(int health)
     {
         this.health = health;
+        for (int i = health - 1; i < HEALTH; i++)
+        {
+            LifeIndicator.transform.GetChild(i).GameObject().SetActive(false);
+        }
     }
 
     public int GetHealth()

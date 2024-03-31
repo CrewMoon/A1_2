@@ -36,8 +36,8 @@ public class MeleeEnemy : MonoBehaviour
                     touchedObject.GetComponent<Hero>().SetHealth(heroHealth - DAMAGE);
                 }
                 else
-                {
-                    touchedObject.SetActive(false);
+                {/*
+                    touchedObject.SetActive(false);*/
                     Debug.Log("fail");
                 }
             }
@@ -66,20 +66,20 @@ public class MeleeEnemy : MonoBehaviour
         
         float radius = this.GetComponentInChildren<CircleCollider2D>().radius;
         float rangeRadius = parent.GetComponent<RectTransform>().rect.width / 2 - radius - offset;
+        Vector2 position = new Vector2();
+        bool walkable = false;
+    
         
-        Vector2 position = new Vector2()
+        while (!walkable)
         {
-            x = Random.Range(-rangeRadius, rangeRadius),
-            y = Random.Range(-rangeRadius, rangeRadius),
-        };
+            position.x = Random.Range(-rangeRadius, rangeRadius);
+            position.y = Random.Range(-rangeRadius, rangeRadius);
         
-        if (AstarPath.active.GetNearest(position).node.Walkable)
-        {
-            this.GetComponent<RectTransform>().anchoredPosition  = position;
-        }
-        else
-        {
-            RefreshPosition();
+            if (AstarPath.active.GetNearest(position).node.Walkable)
+            {
+                walkable = true;
+                this.GetComponent<RectTransform>().anchoredPosition = position;
+            }
         }
     }
 

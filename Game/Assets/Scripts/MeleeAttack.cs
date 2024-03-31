@@ -74,25 +74,24 @@ namespace DefaultNamespace
         public void RefreshPosition()
         {
             GameObject parent = GameObject.Find("Map");
-            
+            float offset = 20f;
             float radius = this.GetComponent<CircleCollider2D>().radius;
-            float rangeRadius = parent.GetComponent<RectTransform>().rect.width / 2 - radius;
+            float rangeRadius = parent.GetComponent<RectTransform>().rect.width / 2 - radius - offset;
+            Vector2 position = new Vector2();
+            bool walkable = false;
+            
+            while (!walkable)
+            {
+                position.x = Random.Range(-rangeRadius, rangeRadius);
+                position.y = Random.Range(-rangeRadius, rangeRadius);
         
-            Vector3 position = new Vector3()
-            {
-                x = Random.Range(-rangeRadius, rangeRadius),
-                y = Random.Range(-rangeRadius, rangeRadius),
-                z = 0
-            };
-        
-            if (AstarPath.active.GetNearest(position).node.Walkable)
-            {
-                this.transform.position = position;
-            }
-            else
-            {
-                RefreshPosition();
+                if (AstarPath.active.GetNearest(position).node.Walkable)
+                {
+                    walkable = true;
+                    this.GetComponent<RectTransform>().anchoredPosition = position;
+                }
             }
         }
+
     }
 }

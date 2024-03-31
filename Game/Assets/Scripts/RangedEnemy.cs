@@ -58,23 +58,23 @@ public class RangedEnemy : MonoBehaviour
     {
         GameObject parent = GameObject.Find("Map");
         float offset = 20f;
-        
+            
         float width = this.GetComponent<RectTransform>().rect.width;
         float rangeRadius = parent.GetComponent<RectTransform>().rect.width / 2 - width / 2 - offset;
+        Vector2 position = new Vector2();
+        bool walkable = false;
+    
         
-        Vector2 position = new Vector2()
+        while (!walkable)
         {
-            x = Random.Range(-rangeRadius, rangeRadius),
-            y = Random.Range(-rangeRadius, rangeRadius)
-        };
+            position.x = Random.Range(-rangeRadius, rangeRadius);
+            position.y = Random.Range(-rangeRadius, rangeRadius);
         
-        if (AstarPath.active.GetNearest(position).node.Walkable)
-        {
-            this.GetComponent<RectTransform>().anchoredPosition  = position;
-        }
-        else
-        {
-            RefreshPosition();
+            if (AstarPath.active.GetNearest(position).node.Walkable)
+            {
+                walkable = true;
+                this.GetComponent<RectTransform>().anchoredPosition = position;
+            }
         }
     }
 
