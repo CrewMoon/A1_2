@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using DefaultNamespace;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -13,20 +14,24 @@ public class SceneManager : MonoBehaviour
     public GameObject WreckableObstacles;
     public GameObject MeleeEnemies;
     public GameObject RangedEnemies;
+    public GameObject FinishPanel;
+
+    private int PresentLevel = 1;
     
     // Start is called before the first frame update
-    void Awake()
+    void Start()
     {
         InitScene();
     }
 
-    private void InitScene()
+    public void InitScene()
     {
-        InitFirstScene();
+        InitFirstLevel();
     }
 
-    private void InitFirstScene()
+    public void InitFirstLevel()
     {
+        PresentLevel = 1;
         RefreshBackground();
         Hero.GetComponent<Hero>().RefreshPosition();
         for (int i = 0; i < 10; i++)
@@ -38,8 +43,9 @@ public class SceneManager : MonoBehaviour
         AstarPath.active.Scan();
     }
 
-    private void InitSecondScene()
+    public void InitSecondLevel()
     {
+        PresentLevel = 2;
         RefreshBackground();
         Hero.GetComponent<Hero>().RefreshPosition();
         for (int i = 0; i < 15; i++)
@@ -48,7 +54,7 @@ public class SceneManager : MonoBehaviour
             MeleeEnemy.GameObject().SetActive(true);
             MeleeEnemy.GetComponentInChildren<MeleeEnemy>().RefreshPosition();
         }
-
+        AstarPath.active.Scan();
         for (int i = 0; i < 5; i++)
         {
             Transform RangedEnemy = RangedEnemies.transform.GetChild(i);
@@ -64,13 +70,42 @@ public class SceneManager : MonoBehaviour
         {
             Transform NondestructibleObstacle =  NondestructibleObstacles.transform.GetChild(i);
             NondestructibleObstacle.GetComponent<NondestructibleObstacle>().RefreshPosition();
+            AstarPath.active.Scan();
         }
-
         for (int i = 0; i < 15; i++)
         {
             Transform WreckableObstacle =  WreckableObstacles.transform.GetChild(i);
             WreckableObstacle.GetComponent<WreckableObstacle>().RefreshPosition();
+            AstarPath.active.Scan();
         }
     }
-    
+
+    public void Fail(int score)
+    {
+        Time.timeScale = 0f;
+        FinishPanel.SetActive(true);
+        SaveRecord(score);
+        FinishPanel.transform.GetChild(1).GetComponent<TMP_Text>().text = "Fail";
+    }
+
+    public void Success(int score)
+    {
+        Time.timeScale = 0f;
+        FinishPanel.SetActive(true);
+        SaveRecord(score);
+        FinishPanel.transform.GetChild(1).GetComponent<TMP_Text>().text = "Success";
+    }
+
+    private void SaveRecord(int score)
+    {
+        GameRecord record = new GameRecord(System.DateTime.Now, PresentLevel, score);
+        string json = JsonUtility.ToJson(record);
+        PlayerPrefs.SetString("GameRecord", json);
+        PlayerPrefs.Save();
+    }
+
+    public int GetPresentLevel()
+    {
+        return PresentLevel;
+    }
 }

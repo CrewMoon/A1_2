@@ -15,10 +15,25 @@ public class MeleeEnemy : MonoBehaviour
     private const float RefreshTime = 2f;
     private int health = HEALTH;
     private bool _canFire = true;
+    private GameObject hero;
 
     private void Awake()
     {
-        GetComponent<AIDestinationSetter>().target = GameObject.Find("Hero").transform;
+        hero = GameObject.Find("Hero");
+        GetComponent<AIDestinationSetter>().target = hero.transform;
+    }
+
+    private void Update()
+    {
+        if (Vector2.Distance(GetComponent<RectTransform>().anchoredPosition,
+                hero.GetComponent<RectTransform>().anchoredPosition) < 50)
+        {
+            this.transform.GetChild(0).gameObject.SetActive(true);
+        }
+        else
+        {
+            this.transform.GetChild(0).gameObject.SetActive(false);
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -36,14 +51,14 @@ public class MeleeEnemy : MonoBehaviour
                     touchedObject.GetComponent<Hero>().SetHealth(heroHealth - DAMAGE);
                 }
                 else
-                {/*
-                    touchedObject.SetActive(false);*/
-                    Debug.Log("fail");
+                {
+                    touchedObject.GetComponent<Hero>().Fail();
                 }
+                
+                _canFire = false;
+                this.transform.GetChild(0).gameObject.SetActive(false);
+                StartCoroutine(CoolDownAttackForSeconds(CoolDownTime));
             }
-
-            _canFire = false;
-            StartCoroutine(CoolDownAttackForSeconds(CoolDownTime));
         }
     }
 
@@ -51,6 +66,7 @@ public class MeleeEnemy : MonoBehaviour
     {
         yield return new WaitForSeconds(coolDownTime);
         _canFire = true;
+        this.transform.GetChild(0).gameObject.SetActive(true);
     }
 
     public void RefreshAfterFreshTime()

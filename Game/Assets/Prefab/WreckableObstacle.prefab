@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 3205353248482560097}
   - component: {fileID: 1122670236865422328}
   - component: {fileID: 3639784171384843156}
+  - component: {fileID: 7179637928743207172}
   m_Layer: 6
   m_Name: WreckableObstacle
   m_TagString: WreckableObstacle
@@ -134,3 +135,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf3596fc1aee41aebeba44a3e00b3376, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &7179637928743207172
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5512984478230739409}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 183748dd497aa473a98ff0cd8cb67fc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 1
+  uniqueID: 4963395376043263531
+  updateError: 1
+  checkTime: 0.2

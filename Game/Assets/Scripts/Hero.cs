@@ -13,6 +13,7 @@ using Image = UnityEngine.UI.Image;
 
 public class Hero : MonoBehaviour
 {
+    private SceneManager sceneManager;
     private const int HEALTH = 30;
     private const int Velocity = 50;
     private const float MeleeAttackDestroryTime = 0.5f;
@@ -39,6 +40,7 @@ public class Hero : MonoBehaviour
     private void Awake()
     {
         Refresh();
+        sceneManager = GameObject.Find("Canvas").GetComponent<SceneManager>();
     }
 
     private void Update()
@@ -79,11 +81,19 @@ public class Hero : MonoBehaviour
         {
             position.x = Random.Range(-rangeRadius, rangeRadius);
             position.y = Random.Range(-rangeRadius, rangeRadius);
-        
-            if (AstarPath.active.GetNearest(position).node.Walkable)
+            this.GetComponent<RectTransform>().anchoredPosition = position;
+            position = this.transform.position;
+
+            Vector2 leftUp = new Vector2(position.x - width / 2, position.y + width / 2);
+            Vector2 rightUp = new Vector2(position.x + width / 2, position.y + width / 2);
+            Vector2 leftDown = new Vector2(position.x - width / 2, position.y - width / 2);
+            Vector2 rightDown = new Vector2(position.x + width / 2, position.y - width / 2);
+            if (AstarPath.active.GetNearest(leftUp).node.Walkable &&
+                AstarPath.active.GetNearest(rightUp).node.Walkable &&
+                AstarPath.active.GetNearest(leftDown).node.Walkable &&
+                AstarPath.active.GetNearest(rightDown).node.Walkable)
             {
                 walkable = true;
-                this.GetComponent<RectTransform>().anchoredPosition = position;
             }
         }
     }
@@ -137,7 +147,7 @@ public class Hero : MonoBehaviour
             {
                 AlreadySurviveTime = 0;
                 isPositionFreshed = false;
-                Debug.Log("do refresh action");
+                Success();
             }
             else
             {
@@ -171,7 +181,7 @@ public class Hero : MonoBehaviour
     private void RangedAttackCoolDown()
     {
         GameObject TimeText = RangedSkill.transform.GetChild(0).GameObject();
-        GameObject CoolDownMask = RangedSkill.transform.GetChild(2).GameObject();
+        GameObject CoolDownMask = RangedSkill.transform.GetChild(1).GetChild(0).GameObject();
         if (!canFireRangedAttack)
         {
             if (RangedAttackCoolDownTime > 0)
@@ -196,7 +206,7 @@ public class Hero : MonoBehaviour
     private void MeleeAttackCoolDown()
     {
         GameObject TimeText = MeleeSkill.transform.GetChild(0).GameObject();
-        GameObject CoolDownMask = MeleeSkill.transform.GetChild(2).GameObject();
+        GameObject CoolDownMask = MeleeSkill.transform.GetChild(1).GetChild(0).GameObject();
         if (!canFireMeleeAttack)
         {
             if (MeleeAttackCoolDownTime > 0)
@@ -217,6 +227,25 @@ public class Hero : MonoBehaviour
         MeleeAttackCoolDownTime = MeleeAttackPrefab.GetComponent<MeleeAttack>().GetCoolDownTime();
         canFireMeleeAttack = true;
     }
+
+    public void Fail()
+    {
+        sceneManager.Fail(Score);
+        Refresh();
+    }
+
+    private void Success()
+    {
+        if (sceneManager.GetPresentLevel() == 1)
+        {
+            sceneManager.InitSecondLevel();
+        }else if(sceneManager.GetPresentLevel() == 2)
+        {
+            sceneManager.Success(Score);
+        }
+        Refresh();
+    }
+    
     private void ResetRangedAttack()
     {
         canFireRangedAttack = true;

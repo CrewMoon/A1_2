@@ -27,11 +27,19 @@ namespace DefaultNamespace
             {
                 position.x = Random.Range(-rangeRadius, rangeRadius);
                 position.y = Random.Range(-rangeRadius, rangeRadius);
+                this.GetComponent<RectTransform>().anchoredPosition = position;
+                position = this.transform.position;
         
-                if (AstarPath.active.GetNearest(position).node.Walkable)
+                Vector2 leftUp = new Vector2(position.x - width / 2, position.y + width / 2);
+                Vector2 rightUp = new Vector2(position.x + width / 2, position.y + width / 2);
+                Vector2 leftDown = new Vector2(position.x - width / 2, position.y - width / 2);
+                Vector2 rightDown = new Vector2(position.x + width / 2, position.y - width / 2);
+                if (AstarPath.active.GetNearest(leftUp).node.Walkable &&
+                    AstarPath.active.GetNearest(rightUp).node.Walkable &&
+                    AstarPath.active.GetNearest(leftDown).node.Walkable &&
+                    AstarPath.active.GetNearest(rightDown).node.Walkable)
                 {
                     walkable = true;
-                    this.GetComponent<RectTransform>().anchoredPosition = position;
                 }
             }
         }
