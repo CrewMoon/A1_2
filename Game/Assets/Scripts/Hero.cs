@@ -47,7 +47,7 @@ public class Hero : MonoBehaviour
         SurviveTimeUpdate();
         RangedAttackCoolDown();
         MeleeAttackCoolDown();
-        TimeIndicator.GetComponent<TMP_Text>().text = "Time: " + Math.Round(AlreadySurviveTime, 2);
+        TimeIndicator.GetComponent<TMP_Text>().text = "Time: " + Math.Round(RequiredSurviveTime - AlreadySurviveTime, 2);
         ScoreIndicator.GetComponent<TMP_Text>().text = "Score: " + Score;
     }
 
@@ -87,7 +87,7 @@ public class Hero : MonoBehaviour
             }
         }
     }
-
+    
     private void KeyCodeResponse()
     {
         Rigidbody2D heroRigidbody2D = this.GetComponent<Rigidbody2D>();
@@ -232,7 +232,7 @@ public class Hero : MonoBehaviour
         this.health = health;
         for (int i = health - 1; i < HEALTH; i++)
         {
-            LifeIndicator.transform.GetChild(i).GameObject().SetActive(false);
+            LifeIndicator.transform.GetChild(1).GetChild(i).GameObject().SetActive(false);
         }
     }
 

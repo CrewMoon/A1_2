@@ -63,9 +63,9 @@ public class MeleeEnemy : MonoBehaviour
     {
         GameObject parent = GameObject.Find("Map");
         float offset = 20f;
-        
-        float radius = this.GetComponentInChildren<CircleCollider2D>().radius;
-        float rangeRadius = parent.GetComponent<RectTransform>().rect.width / 2 - radius - offset;
+            
+        float width = this.GetComponent<RectTransform>().rect.width;
+        float rangeRadius = parent.GetComponent<RectTransform>().rect.width / 2 - width / 2 - offset;
         Vector2 position = new Vector2();
         bool walkable = false;
     

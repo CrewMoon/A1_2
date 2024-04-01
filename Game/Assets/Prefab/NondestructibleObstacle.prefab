@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 5624332325711035655}
   - component: {fileID: 3872689516440516724}
   - component: {fileID: 9018586063046855310}
-  - component: {fileID: 906055246452634229}
   - component: {fileID: 1532488485344164869}
   m_Layer: 6
   m_Name: NondestructibleObstacle
@@ -123,22 +122,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 20, y: 20}
   m_EdgeRadius: 0
---- !u!114 &906055246452634229
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5899875208894624646}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 183748dd497aa473a98ff0cd8cb67fc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  version: 1
-  uniqueID: 6340137351790375756
-  updateError: 1
-  checkTime: 0.2
 --- !u!114 &1532488485344164869
 MonoBehaviour:
   m_ObjectHideFlags: 0

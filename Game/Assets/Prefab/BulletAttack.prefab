@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5410537492297288037}
   - component: {fileID: 669881014092206443}
   - component: {fileID: 7571051052849894626}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -88,7 +88,7 @@ GameObject:
   - component: {fileID: 5358008007805719070}
   - component: {fileID: -2884561010441982099}
   - component: {fileID: 2483677800103470857}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: BulletAttack
   m_TagString: BulletAttack
   m_Icon: {fileID: 0}

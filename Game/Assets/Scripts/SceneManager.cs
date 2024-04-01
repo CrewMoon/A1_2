@@ -22,7 +22,7 @@ public class SceneManager : MonoBehaviour
 
     private void InitScene()
     {
-        InitSecondScene();
+        InitFirstScene();
     }
 
     private void InitFirstScene()
