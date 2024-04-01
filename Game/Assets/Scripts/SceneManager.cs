@@ -40,7 +40,7 @@ public class SceneManager : MonoBehaviour
             MeleeEnemy.GameObject().SetActive(true);
             MeleeEnemy.GetComponentInChildren<MeleeEnemy>().RefreshPosition();
         }
-        AstarPath.active.Scan();
+        // AstarPath.active.Scan();
     }
 
     public void InitSecondLevel()
@@ -54,14 +54,12 @@ public class SceneManager : MonoBehaviour
             MeleeEnemy.GameObject().SetActive(true);
             MeleeEnemy.GetComponentInChildren<MeleeEnemy>().RefreshPosition();
         }
-        AstarPath.active.Scan();
         for (int i = 0; i < 5; i++)
         {
             Transform RangedEnemy = RangedEnemies.transform.GetChild(i);
             RangedEnemy.GameObject().SetActive(true);
             RangedEnemy.GetComponent<RangedEnemy>().RefreshPosition();
         }
-        AstarPath.active.Scan();
     }
 
     private void RefreshBackground()
