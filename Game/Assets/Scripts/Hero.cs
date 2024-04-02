@@ -49,7 +49,7 @@ public class Hero : MonoBehaviour
         SurviveTimeUpdate();
         RangedAttackCoolDown();
         MeleeAttackCoolDown();
-        TimeIndicator.GetComponent<TMP_Text>().text = "Time: " + Math.Round(RequiredSurviveTime - AlreadySurviveTime, 2);
+        TimeIndicator.GetComponent<TMP_Text>().text = "Time: " + Math.Round(RequiredSurviveTime - AlreadySurviveTime, 1);
         ScoreIndicator.GetComponent<TMP_Text>().text = "Score: " + Score;
     }
 
@@ -189,7 +189,7 @@ public class Hero : MonoBehaviour
                 TimeText.SetActive(true);
                 CoolDownMask.SetActive(true);
                 RangedAttackCoolDownTime -= Time.deltaTime;
-                double d = Math.Round(RangedAttackCoolDownTime, 2);
+                double d = Math.Round(RangedAttackCoolDownTime, 1);
                 TimeText.GetComponent<TMP_Text>().text = d.ToString();
                 CoolDownMask.GetComponent<Image>().fillAmount = RangedAttackCoolDownTime /
                                                                 RangedAttackPrefab.GetComponent<BulletAttack>()
@@ -214,7 +214,7 @@ public class Hero : MonoBehaviour
                 TimeText.SetActive(true);
                 CoolDownMask.SetActive(true);
                 MeleeAttackCoolDownTime -= Time.deltaTime;
-                double d = Math.Round(MeleeAttackCoolDownTime, 2);
+                double d = Math.Round(MeleeAttackCoolDownTime, 1);
                 TimeText.GetComponent<TMP_Text>().text = d.ToString();
                 CoolDownMask.GetComponent<Image>().fillAmount = MeleeAttackCoolDownTime /
                                                                 MeleeAttackPrefab.GetComponent<MeleeAttack>()
@@ -258,11 +258,11 @@ public class Hero : MonoBehaviour
 
     public void SetHealth(int health)
     {
-        this.health = health;
-        for (int i = health - 1; i < HEALTH; i++)
+        for (int i = health - 1; i < this.health; i++)
         {
             LifeIndicator.transform.GetChild(1).GetChild(i).GameObject().SetActive(false);
         }
+        this.health = health;
     }
 
     public int GetHealth()

@@ -31,27 +31,31 @@ namespace DefaultNamespace
                     {
                         touchedObject.SetActive(false);
                     }
+                    Destroy(this.gameObject, 0.2f);
                     break;
                 }
                 case "MeleeEnemy":
                 {
-                    int MeleeEnemyHealth = touchedObject.GetComponent<MeleeEnemy>().getHealth();
+                    GameObject meleeEnemy = touchedObject.transform.parent.gameObject;
+                    int MeleeEnemyHealth = meleeEnemy.GetComponent<MeleeEnemy>().getHealth();
                     if (MeleeEnemyHealth > DAMAGE)
                     {
-                        touchedObject.GetComponent<MeleeEnemy>().setHealth(MeleeEnemyHealth - DAMAGE);
+                        meleeEnemy.GetComponent<MeleeEnemy>().setHealth(MeleeEnemyHealth - DAMAGE);
                     }
                     else
                     {
-                        touchedObject.SetActive(false);
-                        touchedObject.GetComponent<MeleeEnemy>().RefreshAfterFreshTime();
-                        touchedObject.SetActive(true);
+                        meleeEnemy.SetActive(false);
+                        meleeEnemy.GetComponent<MeleeEnemy>().RefreshAfterFreshTime();
+                        meleeEnemy.SetActive(true);
                     }
                     hero.GetComponent<Hero>().SetScore(hero.GetComponent<Hero>().GetScore() + 10);
+                    Destroy(this.gameObject, 0.2f);
                     break;
                 }
                 case "BulletEnemy":
                 {
                     Destroy(touchedObject);
+                    Destroy(this.gameObject, 0.2f);
                     break;
                 }
                 case "RangedEnemy":
@@ -60,10 +64,10 @@ namespace DefaultNamespace
                     touchedObject.GetComponent<RangedEnemy>().RefreshAfterFreshTime();
                     touchedObject.SetActive(true);
                     hero.GetComponent<Hero>().SetScore(hero.GetComponent<Hero>().GetScore() + 20);
+                    Destroy(this.gameObject, 0.2f);
                     break;
                 }
             }
-            Destroy(this.gameObject);
         }
         
         public float GetCoolDownTime()

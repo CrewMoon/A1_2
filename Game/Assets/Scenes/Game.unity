@@ -10386,7 +10386,7 @@ MonoBehaviour:
     m_Right: 0
     m_Top: 0
     m_Bottom: 0
-  m_ChildAlignment: 4
+  m_ChildAlignment: 0
   m_StartCorner: 0
   m_StartAxis: 0
   m_CellSize: {x: 10, y: 10}
@@ -17409,7 +17409,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Score
+  m_text: 'Score:'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e3ed1614288d9db4e9fd7454c2bddd1a, type: 2}
   m_sharedMaterial: {fileID: 8857890252856292904, guid: e3ed1614288d9db4e9fd7454c2bddd1a, type: 2}

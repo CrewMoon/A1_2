@@ -14,7 +14,6 @@ public class MeleeEnemy : MonoBehaviour
     private const float CoolDownTime = 1f;
     private const float RefreshTime = 2f;
     private int health = HEALTH;
-    private bool _canFire = true;
     private GameObject hero;
 
     private void Awake()
@@ -36,36 +35,9 @@ public class MeleeEnemy : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (_canFire)
-        {
-            GameObject touchedObject = collision.gameObject;
-            string touchedTage = touchedObject.tag;
-
-            if (touchedTage == "Hero")
-            {
-                int heroHealth = touchedObject.GetComponent<Hero>().GetHealth();
-                if (heroHealth > DAMAGE)
-                {
-                    touchedObject.GetComponent<Hero>().SetHealth(heroHealth - DAMAGE);
-                }
-                else
-                {
-                    touchedObject.GetComponent<Hero>().Fail();
-                }
-                
-                _canFire = false;
-                this.transform.GetChild(0).gameObject.SetActive(false);
-                StartCoroutine(CoolDownAttackForSeconds(CoolDownTime));
-            }
-        }
-    }
-
-    private IEnumerator CoolDownAttackForSeconds(float coolDownTime)
+    public IEnumerator CoolDownAttackForSeconds(float coolDownTime)
     {
         yield return new WaitForSeconds(coolDownTime);
-        _canFire = true;
         this.transform.GetChild(0).gameObject.SetActive(true);
     }
 
@@ -107,5 +79,15 @@ public class MeleeEnemy : MonoBehaviour
     public void setHealth(int health)
     {
         this.health = health;
+    }
+
+    public int getDAMAGE()
+    {
+        return DAMAGE;
+    }
+
+    public float getCoolDownTime()
+    {
+        return CoolDownTime;
     }
 }
