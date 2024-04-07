@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 8261363622110365990}
   m_Layer: 0
   m_Name: Attack
-  m_TagString: MeleeEnemy
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -299,7 +299,7 @@ MonoBehaviour:
   maxAcceleration: -2.5
   rotationSpeed: 360
   slowdownDistance: 0.6
-  pickNextWaypointDist: 2
+  pickNextWaypointDist: 0.2
   endReachedDistance: 0.2
   alwaysDrawGizmos: 0
   slowWhenNotFacingTarget: 1
@@ -330,7 +330,7 @@ GameObject:
   - component: {fileID: 8491537574073404261}
   m_Layer: 0
   m_Name: Enemy
-  m_TagString: MeleeEnemy
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

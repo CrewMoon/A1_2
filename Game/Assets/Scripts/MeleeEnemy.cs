@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Pathfinding;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public class MeleeEnemy : MonoBehaviour
@@ -38,7 +39,8 @@ public class MeleeEnemy : MonoBehaviour
     public IEnumerator CoolDownAttackForSeconds(float coolDownTime)
     {
         yield return new WaitForSeconds(coolDownTime);
-        this.transform.GetChild(0).gameObject.SetActive(true);
+        transform.GetChild(0).GetComponent<CircleCollider2D>().enabled = true;
+        transform.GetChild(0).GetComponent<Image>().enabled = true;
     }
 
     public void RefreshAfterFreshTime()

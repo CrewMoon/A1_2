@@ -116,6 +116,7 @@
 -define:ENABLE_TERRAIN
 -define:ENABLE_TILEMAP
 -define:ENABLE_TIMELINE
+-define:ENABLE_INPUT_SYSTEM
 -define:ENABLE_LEGACY_INPUT_MANAGER
 -define:TEXTCORE_FONT_ENGINE_1_5_OR_NEWER
 -define:CSHARP_7_OR_LATER
@@ -328,6 +329,7 @@
 -r:"D:/Tools/Unity/2022.3.22f1/Editor/Data/NetStandard/ref/2.1.0/netstandard.dll"
 -r:"Library/PackageCache/com.unity.collections@1.2.4/Unity.Collections.LowLevel.ILSupport/Unity.Collections.LowLevel.ILSupport.dll"
 -r:"Library/PackageCache/com.unity.visualscripting@1.9.2/Runtime/VisualScripting.Flow/Dependencies/NCalc/Unity.VisualScripting.Antlr3.Runtime.dll"
+-r:"Library/PackageCache/jillejr.newtonsoft.json-for-unity@13.0.102/Plugins/Newtonsoft.Json Editor/Newtonsoft.Json.dll"
 -r:"Library/Bee/artifacts/1900b0aEDbg.dag/AstarPathfindingProject.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aEDbg.dag/AstarPathfindingProjectEditor.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aEDbg.dag/PackageToolsEditor.ref.dll"
@@ -353,6 +355,8 @@
 -r:"Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Burst.Editor.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Burst.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aEDbg.dag/Unity.Collections.ref.dll"
+-r:"Library/Bee/artifacts/1900b0aEDbg.dag/Unity.InputSystem.ForUI.ref.dll"
+-r:"Library/Bee/artifacts/1900b0aEDbg.dag/Unity.InputSystem.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aEDbg.dag/Unity.InternalAPIEditorBridge.001.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aEDbg.dag/Unity.InternalAPIEditorBridge.005.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aEDbg.dag/Unity.InternalAPIEngineBridge.001.ref.dll"
@@ -379,16 +383,21 @@
 -analyzer:"D:/Tools/Unity/2022.3.22f1/Editor/Data/Tools/Unity.SourceGenerators/Unity.SourceGenerators.dll"
 "Assets/Scripts/BulletAttack.cs"
 "Assets/Scripts/BulletEnemy.cs"
-"Assets/Scripts/FinishPanel.cs"
+"Assets/Scripts/GridMap.cs"
 "Assets/Scripts/Hero.cs"
 "Assets/Scripts/MeleeAttack.cs"
 "Assets/Scripts/MeleeEnemy.cs"
 "Assets/Scripts/MeleeEnemyAttack.cs"
 "Assets/Scripts/NondestructibleObstacle.cs"
 "Assets/Scripts/RangedEnemy.cs"
-"Assets/Scripts/RankingPanel.cs"
-"Assets/Scripts/SceneManager.cs"
-"Assets/Scripts/StartManager.cs"
+"Assets/Scripts/System/AudioManager.cs"
+"Assets/Scripts/System/FinishPanel.cs"
+"Assets/Scripts/System/RankingPanel.cs"
+"Assets/Scripts/System/SceneLoader.cs"
+"Assets/Scripts/System/SceneManager.cs"
+"Assets/Scripts/System/ScoreSave.cs"
+"Assets/Scripts/System/Singleton.cs"
+"Assets/Scripts/System/StartManager.cs"
 "Assets/Scripts/WreckableObstacle.cs"
 "Assets/TextMesh Pro/Examples & Extras/Scripts/Benchmark01.cs"
 "Assets/TextMesh Pro/Examples & Extras/Scripts/Benchmark01_UGUI.cs"

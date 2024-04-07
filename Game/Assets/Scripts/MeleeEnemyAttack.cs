@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MeleeEnemyAttack : MonoBehaviour
 {
@@ -15,7 +16,7 @@ public class MeleeEnemyAttack : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        GameObject touchedObject = collision.gameObject;
+         GameObject touchedObject = collision.gameObject;
         string touchedTage = touchedObject.tag;
 
         if (touchedTage == "Hero")
@@ -30,7 +31,8 @@ public class MeleeEnemyAttack : MonoBehaviour
                 touchedObject.GetComponent<Hero>().Fail();
             }
                 
-            this.gameObject.SetActive(false);
+            GetComponent<CircleCollider2D>().enabled = false;
+            GetComponent<Image>().enabled = false;
             StartCoroutine(MeleeEnemy.GetComponent<MeleeEnemy>().CoolDownAttackForSeconds(MeleeEnemy.GetComponent<MeleeEnemy>().getCoolDownTime()));
         }
     }

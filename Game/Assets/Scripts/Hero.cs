@@ -7,6 +7,7 @@ using Pathfinding;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using Random = UnityEngine.Random;
 using UnityEngine.UI;
 using Image = UnityEngine.UI.Image;
@@ -26,7 +27,8 @@ public class Hero : MonoBehaviour
     private int Score;
     private float RangedAttackCoolDownTime;
     private float MeleeAttackCoolDownTime;
-    
+
+    public GameObject StopPanel;
     public GameObject MeleeAttackPrefab;
     public GameObject RangedAttackPrefab;
     public GameObject RangedSkill;
@@ -45,6 +47,7 @@ public class Hero : MonoBehaviour
 
     private void Update()
     {
+        FollowingMouse();
         KeyCodeResponse();
         SurviveTimeUpdate();
         RangedAttackCoolDown();
@@ -128,11 +131,13 @@ public class Hero : MonoBehaviour
         {
             if (Time.timeScale == 0f)
             {
+                StopPanel.SetActive(true);
                 Time.timeScale = 1f;
                 Debug.Log("Start");
             }
             else
             {
+                StopPanel.SetActive(true);
                 Time.timeScale = 0f;
                 Debug.Log("Pause");
             }
@@ -160,7 +165,7 @@ public class Hero : MonoBehaviour
     {
         if (canFireRangedAttack)
         {
-            GameObject rangedAttack = Instantiate(RangedAttackPrefab, this.transform.position, this.transform.rotation, this.transform.GetChild(0));
+            GameObject rangedAttack = Instantiate(RangedAttackPrefab, this.transform.position, this.transform.GetChild(2).rotation, this.transform);
             rangedAttack.GetComponent<BulletAttack>().Fire();
             canFireRangedAttack = false;
             Invoke("ResetRangedAttack", rangedAttack.GetComponent<BulletAttack>().GetCoolDownTime());
@@ -171,7 +176,7 @@ public class Hero : MonoBehaviour
     {
         if (canFireMeleeAttack)
         {
-            GameObject meleeAttack = Instantiate(MeleeAttackPrefab, this.transform.position, this.transform.rotation, this.transform.GetChild(1));
+            GameObject meleeAttack = Instantiate(MeleeAttackPrefab, this.transform.position, this.transform.rotation, this.transform.GetChild(0));
             Destroy(meleeAttack, MeleeAttackDestroryTime);
             canFireMeleeAttack = false;
             Invoke("ResetMeleeAttack", meleeAttack.GetComponent<MeleeAttack>().GetCoolDownTime());
@@ -228,6 +233,15 @@ public class Hero : MonoBehaviour
         canFireMeleeAttack = true;
     }
 
+    private void FollowingMouse()
+    {
+        Vector2 mousePos = Input.mousePosition;
+        Vector2 Direction = (mousePos - (Vector2)transform.position).normalized;
+        float angle = Mathf.Atan2(Direction.y, Direction.x) * Mathf.Rad2Deg;
+        Quaternion targetRotation = Quaternion.Euler(0, 0, angle);
+        transform.GetChild(2).rotation = Quaternion.Slerp(transform.GetChild(2).rotation, targetRotation, Time.deltaTime * 8);
+    }
+
     public void Fail()
     {
         sceneManager.Fail(Score);
@@ -236,14 +250,13 @@ public class Hero : MonoBehaviour
 
     private void Success()
     {
-        if (sceneManager.GetPresentLevel() == 1)
+        if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Level1")
         {
-            sceneManager.InitSecondLevel();
-        }else if(sceneManager.GetPresentLevel() == 2)
+            SceneLoader.Instance.LoadScene("Level2");
+        }else if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Level2")
         {
             sceneManager.Success(Score);
         }
-        Refresh();
     }
     
     private void ResetRangedAttack()

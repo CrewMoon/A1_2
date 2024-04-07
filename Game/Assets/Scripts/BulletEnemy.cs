@@ -32,9 +32,8 @@ public class BulletEnemy : MonoBehaviour
                     touchedObject.GetComponent<Hero>().SetHealth(heroHealth - DAMAGE);
                 }
                 else
-                {/*
-                    touchedObject.SetActive(false);*/
-                    Debug.Log("fail");
+                {
+                    touchedObject.GetComponent<Hero>().Fail();
                 }
                 break;
             }

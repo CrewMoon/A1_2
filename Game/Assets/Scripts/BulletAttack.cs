@@ -28,11 +28,19 @@ public class BulletAttack : MonoBehaviour
 
         public void Fire()
         {
-            Vector2 worldMousePosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+            /*Vector2 worldMousePosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
             Vector2 mousePosition =
                 transform.InverseTransformPoint(Camera.main.ScreenToViewportPoint(worldMousePosition));
-            direction = (mousePosition - this.GetComponent<RectTransform>().anchoredPosition).normalized;
-            this.transform.GetChild(0).rotation = Quaternion.AngleAxis(Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg, Vector3.forward);
+            Vector2 originalPosition = this.GetComponent<RectTransform>().anchoredPosition;
+            this.transform.position = mousePosition;
+            Vector2 newPosition = this.GetComponent<RectTransform>().anchoredPosition;
+            
+            direction = (this.GetComponent<RectTransform>().anchoredPosition - originalPosition).normalized;
+            this.GetComponent<RectTransform>().anchoredPosition = originalPosition;
+            float angleParent = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+            transform.eulerAngles = new Vector3(0, 0, angleParent);
+            float angleChild = Vector3.SignedAngle(Vector3.up, direction, Vector3.forward);
+            this.transform.GetChild(0).rotation = Quaternion.Euler(0, 0, angleChild);*/
             isFired = true;
             Move();
         }
@@ -94,6 +102,7 @@ public class BulletAttack : MonoBehaviour
         {
             if (isFired)
             {
+                direction = new Vector2(Mathf.Cos(this.transform.rotation.eulerAngles.z * Mathf.Deg2Rad), Mathf.Sin(this.transform.rotation.eulerAngles.z * Mathf.Deg2Rad));
                 Vector2 bulletPosition = this.GetComponent<RectTransform>().anchoredPosition;
                 bulletPosition += direction * BulletSpeed * Time.deltaTime;
                 this.GetComponent<RectTransform>().anchoredPosition = bulletPosition;
