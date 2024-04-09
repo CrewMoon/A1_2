@@ -28,19 +28,6 @@ public class BulletAttack : MonoBehaviour
 
         public void Fire()
         {
-            /*Vector2 worldMousePosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
-            Vector2 mousePosition =
-                transform.InverseTransformPoint(Camera.main.ScreenToViewportPoint(worldMousePosition));
-            Vector2 originalPosition = this.GetComponent<RectTransform>().anchoredPosition;
-            this.transform.position = mousePosition;
-            Vector2 newPosition = this.GetComponent<RectTransform>().anchoredPosition;
-            
-            direction = (this.GetComponent<RectTransform>().anchoredPosition - originalPosition).normalized;
-            this.GetComponent<RectTransform>().anchoredPosition = originalPosition;
-            float angleParent = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-            transform.eulerAngles = new Vector3(0, 0, angleParent);
-            float angleChild = Vector3.SignedAngle(Vector3.up, direction, Vector3.forward);
-            this.transform.GetChild(0).rotation = Quaternion.Euler(0, 0, angleChild);*/
             isFired = true;
             Move();
         }
@@ -52,6 +39,9 @@ public class BulletAttack : MonoBehaviour
 
             switch (touchedTage)
             {
+                case "NondestructibleObstacle":
+                    Destroy(this.gameObject);
+                    break;
                 case "WreckableObstacle":
                 {
                     int ObstacleHealth = touchedObject.GetComponent<WreckableObstacle>().getHealth();
@@ -63,6 +53,7 @@ public class BulletAttack : MonoBehaviour
                     {
                         touchedObject.SetActive(false);
                     }
+                    Destroy(this.gameObject);
                     break;
                 }
                 case "MeleeEnemy":
@@ -74,28 +65,26 @@ public class BulletAttack : MonoBehaviour
                     }
                     else
                     {
-                        touchedObject.SetActive(false);
                         touchedObject.GetComponent<MeleeEnemy>().RefreshAfterFreshTime();
-                        touchedObject.SetActive(true);
+                        hero.GetComponent<Hero>().SetScore(hero.GetComponent<Hero>().GetScore() + 10);
                     }
-                    hero.GetComponent<Hero>().SetScore(hero.GetComponent<Hero>().GetScore() + 10);
+                    Destroy(this.gameObject);
                     break;
                 }
                 case "BulletEnemy":
                 {
                     Destroy(touchedObject);
+                    Destroy(this.gameObject);
                     break;
                 }
                 case "RangedEnemy":
                 {
-                    touchedObject.SetActive(false);
                     touchedObject.GetComponent<RangedEnemy>().RefreshAfterFreshTime();
-                    touchedObject.SetActive(true);
                     hero.GetComponent<Hero>().SetScore(hero.GetComponent<Hero>().GetScore() + 20);
+                    Destroy(this.gameObject);
                     break;
                 }
             }
-            Destroy(this.gameObject);
         }
 
         private void Move()
@@ -113,5 +102,9 @@ public class BulletAttack : MonoBehaviour
         {
             return CooldownTime;
         }
-        
+
+        public int GetDamage()
+        {
+            return DAMAGE;
+        }
     }

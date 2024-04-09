@@ -16,7 +16,7 @@ public class MeleeEnemyAttack : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-         GameObject touchedObject = collision.gameObject;
+        GameObject touchedObject = collision.gameObject;
         string touchedTage = touchedObject.tag;
 
         if (touchedTage == "Hero")

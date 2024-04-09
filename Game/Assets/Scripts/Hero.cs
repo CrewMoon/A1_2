@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using DefaultNamespace;
-using Microsoft.Unity.VisualStudio.Editor;
 using Pathfinding;
 using TMPro;
 using Unity.VisualScripting;
@@ -14,7 +13,6 @@ using Image = UnityEngine.UI.Image;
 
 public class Hero : MonoBehaviour
 {
-    private SceneManager sceneManager;
     private const int HEALTH = 30;
     private const int Velocity = 50;
     private const float MeleeAttackDestroryTime = 0.5f;
@@ -27,6 +25,8 @@ public class Hero : MonoBehaviour
     private int Score;
     private float RangedAttackCoolDownTime;
     private float MeleeAttackCoolDownTime;
+    private GameObject map;
+    private int[] gridPos;
 
     public GameObject StopPanel;
     public GameObject MeleeAttackPrefab;
@@ -36,13 +36,13 @@ public class Hero : MonoBehaviour
     public GameObject TimeIndicator;
     public GameObject ScoreIndicator;
     public GameObject LifeIndicator;
+    public GameObject RangedAttackParent;
+    public SceneManager sceneManager;
 
 
-
-    private void Awake()
+    private void Start()
     {
         Refresh();
-        sceneManager = GameObject.Find("Canvas").GetComponent<SceneManager>();
     }
 
     private void Update()
@@ -71,33 +71,16 @@ public class Hero : MonoBehaviour
 
     public void RefreshPosition()
     {
-        GameObject parent = GameObject.Find("Map");
-        float offset = 20f;
-            
-        float width = this.GetComponent<RectTransform>().rect.width;
-        float rangeRadius = parent.GetComponent<RectTransform>().rect.width / 2 - width / 2 - offset;
-        Vector2 position = new Vector2();
-        bool walkable = false;
-    
-        
-        while (!walkable)
+        if (this.gridPos == null)
         {
-            position.x = Random.Range(-rangeRadius, rangeRadius);
-            position.y = Random.Range(-rangeRadius, rangeRadius);
-            this.GetComponent<RectTransform>().anchoredPosition = position;
-            position = this.transform.position;
-
-            Vector2 leftUp = new Vector2(position.x - width / 2, position.y + width / 2);
-            Vector2 rightUp = new Vector2(position.x + width / 2, position.y + width / 2);
-            Vector2 leftDown = new Vector2(position.x - width / 2, position.y - width / 2);
-            Vector2 rightDown = new Vector2(position.x + width / 2, position.y - width / 2);
-            if (AstarPath.active.GetNearest(leftUp).node.Walkable &&
-                AstarPath.active.GetNearest(rightUp).node.Walkable &&
-                AstarPath.active.GetNearest(leftDown).node.Walkable &&
-                AstarPath.active.GetNearest(rightDown).node.Walkable)
-            {
-                walkable = true;
-            }
+            gridPos = GridMap.Instance.OccupyGrid();
+            GetComponent<RectTransform>().anchoredPosition = GridMap.Instance.ConvertGridPosToWorldPos(gridPos[0], gridPos[1]);
+        }
+        else
+        {
+            GridMap.Instance.ReleaseGrid(gridPos[0], gridPos[1]);
+            gridPos = GridMap.Instance.OccupyGrid();
+            GetComponent<RectTransform>().anchoredPosition = GridMap.Instance.ConvertGridPosToWorldPos(gridPos[0], gridPos[1]);
         }
     }
     
@@ -131,7 +114,7 @@ public class Hero : MonoBehaviour
         {
             if (Time.timeScale == 0f)
             {
-                StopPanel.SetActive(true);
+                StopPanel.SetActive(false);
                 Time.timeScale = 1f;
                 Debug.Log("Start");
             }
@@ -165,7 +148,7 @@ public class Hero : MonoBehaviour
     {
         if (canFireRangedAttack)
         {
-            GameObject rangedAttack = Instantiate(RangedAttackPrefab, this.transform.position, this.transform.GetChild(2).rotation, this.transform);
+            GameObject rangedAttack = Instantiate(RangedAttackPrefab, this.transform.position, this.transform.GetChild(2).rotation, RangedAttackParent.transform);
             rangedAttack.GetComponent<BulletAttack>().Fire();
             canFireRangedAttack = false;
             Invoke("ResetRangedAttack", rangedAttack.GetComponent<BulletAttack>().GetCoolDownTime());

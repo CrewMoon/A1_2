@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using DefaultNamespace;
 using Pathfinding;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -16,6 +17,7 @@ public class MeleeEnemy : MonoBehaviour
     private const float RefreshTime = 2f;
     private int health = HEALTH;
     private GameObject hero;
+    private int[] gridPos;
 
     private void Awake()
     {
@@ -45,31 +47,31 @@ public class MeleeEnemy : MonoBehaviour
 
     public void RefreshAfterFreshTime()
     {
-        Invoke("RefreshPosition", RefreshTime);
+        transform.GetChild(0).gameObject.SetActive(false);
+        transform.GetChild(1).gameObject.SetActive(false);
+        Invoke("Reset", RefreshTime);
         health = HEALTH;
     }
-    
+
+    private void Reset()
+    {
+        RefreshPosition();
+        transform.GetChild(0).gameObject.SetActive(true);
+        transform.GetChild(1).gameObject.SetActive(true);
+    }
+
     public void RefreshPosition()
     {
-        GameObject parent = GameObject.Find("Map");
-        float offset = 20f;
-            
-        float width = this.GetComponent<RectTransform>().rect.width;
-        float rangeRadius = parent.GetComponent<RectTransform>().rect.width / 2 - width / 2 - offset;
-        Vector2 position = new Vector2();
-        bool walkable = false;
-    
-        
-        while (!walkable)
+        if (this.gridPos == null)
         {
-            position.x = Random.Range(-rangeRadius, rangeRadius);
-            position.y = Random.Range(-rangeRadius, rangeRadius);
-        
-            if (AstarPath.active.GetNearest(position).node.Walkable)
-            {
-                walkable = true;
-                this.GetComponent<RectTransform>().anchoredPosition = position;
-            }
+            gridPos = GridMap.Instance.OccupyGrid();
+            GetComponent<RectTransform>().anchoredPosition = GridMap.Instance.ConvertGridPosToWorldPos(gridPos[0], gridPos[1]);
+        }
+        else
+        {
+            GridMap.Instance.ReleaseGrid(gridPos[0], gridPos[1]);
+            gridPos = GridMap.Instance.OccupyGrid();
+            GetComponent<RectTransform>().anchoredPosition = GridMap.Instance.ConvertGridPosToWorldPos(gridPos[0], gridPos[1]);
         }
     }
 

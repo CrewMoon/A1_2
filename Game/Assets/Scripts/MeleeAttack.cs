@@ -8,6 +8,7 @@ namespace DefaultNamespace
         private const float CooldownTime = 2;
         private const int Range = 60;
         private GameObject hero;
+        private int[] gridPos;
         private void Awake()
         {
             hero = GameObject.Find("Hero");
@@ -36,7 +37,7 @@ namespace DefaultNamespace
                 }
                 case "MeleeEnemy":
                 {
-                    GameObject meleeEnemy = touchedObject.transform.parent.gameObject;
+                    GameObject meleeEnemy = touchedObject;
                     int MeleeEnemyHealth = meleeEnemy.GetComponent<MeleeEnemy>().getHealth();
                     if (MeleeEnemyHealth > DAMAGE)
                     {
@@ -44,11 +45,9 @@ namespace DefaultNamespace
                     }
                     else
                     {
-                        meleeEnemy.SetActive(false);
                         meleeEnemy.GetComponent<MeleeEnemy>().RefreshAfterFreshTime();
-                        meleeEnemy.SetActive(true);
+                        hero.GetComponent<Hero>().SetScore(hero.GetComponent<Hero>().GetScore() + 10);
                     }
-                    hero.GetComponent<Hero>().SetScore(hero.GetComponent<Hero>().GetScore() + 10);
                     Destroy(this.gameObject, 0.2f);
                     break;
                 }
@@ -60,9 +59,7 @@ namespace DefaultNamespace
                 }
                 case "RangedEnemy":
                 {
-                    touchedObject.SetActive(false);
                     touchedObject.GetComponent<RangedEnemy>().RefreshAfterFreshTime();
-                    touchedObject.SetActive(true);
                     hero.GetComponent<Hero>().SetScore(hero.GetComponent<Hero>().GetScore() + 20);
                     Destroy(this.gameObject, 0.2f);
                     break;
@@ -77,25 +74,22 @@ namespace DefaultNamespace
         
         public void RefreshPosition()
         {
-            GameObject parent = GameObject.Find("Map");
-            float offset = 20f;
-            float radius = this.GetComponent<CircleCollider2D>().radius;
-            float rangeRadius = parent.GetComponent<RectTransform>().rect.width / 2 - radius - offset;
-            Vector2 position = new Vector2();
-            bool walkable = false;
-            
-            while (!walkable)
+            if (this.gridPos == null)
             {
-                position.x = Random.Range(-rangeRadius, rangeRadius);
-                position.y = Random.Range(-rangeRadius, rangeRadius);
-        
-                if (AstarPath.active.GetNearest(position).node.Walkable)
-                {
-                    walkable = true;
-                    this.GetComponent<RectTransform>().anchoredPosition = position;
-                }
+                gridPos = GridMap.Instance.OccupyGrid();
+                GetComponent<RectTransform>().anchoredPosition = GridMap.Instance.ConvertGridPosToWorldPos(gridPos[0], gridPos[1]);
+            }
+            else
+            {
+                GridMap.Instance.ReleaseGrid(gridPos[0], gridPos[1]);
+                gridPos = GridMap.Instance.OccupyGrid();
+                GetComponent<RectTransform>().anchoredPosition = GridMap.Instance.ConvertGridPosToWorldPos(gridPos[0], gridPos[1]);
             }
         }
 
+        public int getDamage()
+        {
+            return DAMAGE;
+    }
     }
 }

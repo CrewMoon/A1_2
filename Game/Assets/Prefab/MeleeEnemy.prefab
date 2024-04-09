@@ -140,6 +140,7 @@ GameObject:
   - component: {fileID: 3825832356242898590}
   - component: {fileID: 5706474122788580320}
   - component: {fileID: 620765444466007315}
+  - component: {fileID: 5869214512836768884}
   m_Layer: 0
   m_Name: MeleeEnemy
   m_TagString: MeleeEnemy
@@ -219,7 +220,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 16, y: 16}
   m_EdgeRadius: 0
 --- !u!114 &8135909610082695454
 MonoBehaviour:
@@ -317,6 +318,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa885bd93b398f54b8f9f82e636fa3d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!50 &5869214512836768884
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3930109731685880132}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 1
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 0
+  m_CollisionDetection: 1
+  m_Constraints: 4
 --- !u!1 &4134202125148446613
 GameObject:
   m_ObjectHideFlags: 0

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public class RangedEnemy : MonoBehaviour
@@ -13,6 +14,7 @@ public class RangedEnemy : MonoBehaviour
     private int health = HEALTH;
     private GameObject Hero;
     private Vector2 direction;
+    private int[] gridPos;
     
     public GameObject BulletEnemyPrefab;
 
@@ -31,7 +33,8 @@ public class RangedEnemy : MonoBehaviour
     {
         if (_canFire)
         {
-            GameObject bulletEnemy = Instantiate(BulletEnemyPrefab, this.transform.position, this.transform.GetChild(0).rotation,
+            Quaternion rotation = Quaternion.AngleAxis(90, Vector3.forward);
+            GameObject bulletEnemy = Instantiate(BulletEnemyPrefab, this.transform.position, this.transform.GetChild(0).rotation * rotation,
                 this.transform);
             bulletEnemy.GetComponent<BulletEnemy>().Fire();
             
@@ -50,31 +53,31 @@ public class RangedEnemy : MonoBehaviour
 
     public void RefreshAfterFreshTime()
     {
-        Invoke("RefreshPosition", RefreshTime);
+        GetComponent<Image>().enabled = false;
+        transform.GetChild(0).gameObject.SetActive(false);
+        Invoke("Reset", RefreshTime);
         health = HEALTH;
+    }
+    
+    private void Reset()
+    {
+        GetComponent<Image>().enabled = true;
+        RefreshPosition();
+        transform.GetChild(0).gameObject.SetActive(true);
     }
     
     public void RefreshPosition()
     {
-        GameObject parent = GameObject.Find("Map");
-        float offset = 20f;
-            
-        float width = this.GetComponent<RectTransform>().rect.width;
-        float rangeRadius = parent.GetComponent<RectTransform>().rect.width / 2 - width / 2 - offset;
-        Vector2 position = new Vector2();
-        bool walkable = false;
-    
-        
-        while (!walkable)
+        if (this.gridPos == null)
         {
-            position.x = Random.Range(-rangeRadius, rangeRadius);
-            position.y = Random.Range(-rangeRadius, rangeRadius);
-        
-            if (AstarPath.active.GetNearest(position).node.Walkable)
-            {
-                walkable = true;
-                this.GetComponent<RectTransform>().anchoredPosition = position;
-            }
+            gridPos = GridMap.Instance.OccupyGrid();
+            GetComponent<RectTransform>().anchoredPosition = GridMap.Instance.ConvertGridPosToWorldPos(gridPos[0], gridPos[1]);
+        }
+        else
+        {
+            GridMap.Instance.ReleaseGrid(gridPos[0], gridPos[1]);
+            gridPos = GridMap.Instance.OccupyGrid();
+            GetComponent<RectTransform>().anchoredPosition = GridMap.Instance.ConvertGridPosToWorldPos(gridPos[0], gridPos[1]);
         }
     }
 
@@ -82,7 +85,9 @@ public class RangedEnemy : MonoBehaviour
     {
         Vector2 heroPosition = Hero.GetComponent<RectTransform>().anchoredPosition;
         direction = (heroPosition - this.GetComponent<RectTransform>().anchoredPosition).normalized;
-        this.transform.GetChild(0).rotation = Quaternion.AngleAxis(Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg, Vector3.forward);
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        Quaternion targetRotation = Quaternion.Euler(0, 0, angle);
+        this.transform.GetChild(0).rotation = Quaternion.Slerp(this.transform.GetChild(0).rotation, targetRotation, Time.deltaTime * 8);
     }
     
     public int getHealth()

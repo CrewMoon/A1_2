@@ -10,11 +10,11 @@ using UnityEngine.UI;
 [System.Serializable]
 public class GameRecord
 {
-    public DateTime date;
+    public string date;
     public int level;
     public int score;
 
-    public GameRecord(DateTime date, int level, int score)
+    public GameRecord(string date, int level, int score)
     {
         this.date = date;
         this.level = level;

@@ -26,6 +26,7 @@ public class SceneManager : MonoBehaviour
 
     public void InitScene()
     {
+        GridMap.Instance.InitializeGrid();
         if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Level1")
         {
             InitFirstLevel();
@@ -41,13 +42,14 @@ public class SceneManager : MonoBehaviour
         PresentLevel = 1;
         RefreshBackground();
         Hero.GetComponent<Hero>().RefreshPosition();
+        Hero.GetComponent<Hero>().enabled = true;
         for (int i = 0; i < 10; i++)
         {
             Transform MeleeEnemy = MeleeEnemies.transform.GetChild(i);
             MeleeEnemy.GameObject().SetActive(true);
             MeleeEnemy.GetComponentInChildren<MeleeEnemy>().RefreshPosition();
         }
-        // AstarPath.active.Scan();
+        AstarPath.active.Scan();
     }
 
     public void InitSecondLevel()
@@ -55,6 +57,7 @@ public class SceneManager : MonoBehaviour
         PresentLevel = 2;
         RefreshBackground();
         Hero.GetComponent<Hero>().RefreshPosition();
+        Hero.GetComponent<Hero>().enabled = true;
         for (int i = 0; i < 15; i++)
         {
             Transform MeleeEnemy = MeleeEnemies.transform.GetChild(i);
@@ -67,6 +70,7 @@ public class SceneManager : MonoBehaviour
             RangedEnemy.GameObject().SetActive(true);
             RangedEnemy.GetComponent<RangedEnemy>().RefreshPosition();
         }
+        AstarPath.active.Scan();
     }
 
     private void RefreshBackground()
@@ -75,27 +79,26 @@ public class SceneManager : MonoBehaviour
         {
             Transform NondestructibleObstacle =  NondestructibleObstacles.transform.GetChild(i);
             NondestructibleObstacle.GetComponent<NondestructibleObstacle>().RefreshPosition();
-            AstarPath.active.Scan();
         }
         for (int i = 0; i < 15; i++)
         {
             Transform WreckableObstacle =  WreckableObstacles.transform.GetChild(i);
             WreckableObstacle.GetComponent<WreckableObstacle>().RefreshPosition();
-            AstarPath.active.Scan();
         }
     }
 
     public void Fail(int score)
     {
-        Time.timeScale = 0f;
+        // Time.timeScale = 0f;
+        transform.GetChild(1).gameObject.SetActive(false);
         FinishPanel.SetActive(true);
-        SaveRecord(score);
         FinishPanel.transform.GetChild(1).GetComponent<TMP_Text>().text = "Fail";
     }
 
     public void Success(int score)
     {
-        Time.timeScale = 0f;
+        // Time.timeScale = 0f;
+        transform.GetChild(1).gameObject.SetActive(false);
         FinishPanel.SetActive(true);
         SaveRecord(score);
         FinishPanel.transform.GetChild(1).GetComponent<TMP_Text>().text = "Success";
@@ -103,7 +106,7 @@ public class SceneManager : MonoBehaviour
 
     private void SaveRecord(int score)
     {
-        GameRecord record = new GameRecord(System.DateTime.Now, PresentLevel, score);
+        GameRecord record = new GameRecord(System.DateTime.Now.ToString(), PresentLevel, score);
         ScoreSave.SaveByJson(record);
     }
 

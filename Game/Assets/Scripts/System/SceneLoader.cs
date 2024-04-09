@@ -5,9 +5,9 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class SceneLoader : Singleton<SceneLoader>
+public class SceneLoader : PersistentSingleton<SceneLoader>
 {
-    public Image LoadImage;
+    [SerializeField] Image LoadImage;
     public float fadetime = 2.5f;
     public int score;
     Color color;
